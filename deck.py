@@ -3,7 +3,7 @@ from functools import total_ordering
 import random
 
 suits = ['clubs', 'diamonds', 'heart', 'spades']
-numbers = ['6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace']
+faces = ['6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace']
 
 class Deck:
     def __init__(self):
@@ -13,8 +13,8 @@ class Deck:
     def reset(self):
         self.cards = []
         for suit in suits:
-            for number in numbers:
-                self.cards.append(Card(suit=suit, number=number))
+            for face in faces:
+                self.cards.append(Card(suit=suit, face=face))
 
     def set_trump(self):
         self.shuffle()
@@ -47,7 +47,6 @@ class Deck:
     def __str__(self):
         string = ''
         for card in self.cards:
-            # print(card)
             string += f'{card}\n'
         return string
 
@@ -56,7 +55,7 @@ class Deck:
 @total_ordering
 class Card:
     suit: str
-    number: str
+    face: str
 
     def __eq__(self, other):
         if not isinstance(other, Card):
@@ -73,11 +72,11 @@ class Card:
         if other.suit == suits[0] and self.suit != suits[0]:
             return True
 
-        return numbers.index(self.number) < numbers.index(other.number)
+        return faces.index(self.face) < faces.index(other.face)
 
     def __str__(self):
-        return f'{self.number} of {self.suit}'
+        return f'{self.face} of {self.suit}'
 
     def copy(self):
-        return Card(suit=self.suit, number=self.number)
+        return Card(suit=self.suit, face=self.face)
         
