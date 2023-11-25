@@ -25,10 +25,6 @@ def play_game(players, deck):
             skip = True
             # this means the player picked up, and skips their next attack turn
 
-        # have players draw their hands
-        players[attacker].draw_hand(deck)
-        players[defending_player].draw_hand(deck)
-
         # shows the rest of the players which cards were played
         show_players_moves(players, attack_move, attacker)
         show_players_moves(players, defense_move, defending_player)
@@ -38,6 +34,8 @@ def play_game(players, deck):
             winners.append(players.pop(attacker))
             attacker -= 1
             defending_player -= 1
+        else:
+            players[attacker].draw_hand(deck)
 
         if len(players) == 1:
             break
@@ -46,6 +44,8 @@ def play_game(players, deck):
             winners.append(players.pop(defending_player))
             attacker -= 1
             defending_player -= 1
+        else:
+            players[defending_player].draw_hand(deck)
 
         attacker = (attacker + 1) % len(players)
 
