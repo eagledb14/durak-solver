@@ -17,7 +17,7 @@ class RandomPlayer:
         valid_moves = get_valid_defense_moves(self.hand, attack_hand, self.trump_card.suit)
 
         # player grabs the cards, has no way to defend
-        if len(valid_moves) == 0:
+        if len(valid_moves) == 1:
             self.hand.extend(attack_hand)
             return []
 
