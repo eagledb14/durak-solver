@@ -1,13 +1,72 @@
-from numpy import copy
-from deck import Deck, faces
+from deck import faces
 from itertools import product, combinations
+# from random_player import RandomPlayer
 
 
-def play_game(players):
-    deck = Deck()
+def play_game(players, deck):
     winners = []
 
+    setup_game(players, deck)
+    skip = False
 
+    attacker = 0
+    while len(players) > 1:
+        # pop off anyone who has run out of cards
+        if players[attacker].is_finished():
+            winners.append(players.pop(attacker))
+            continue
+
+        # skip turn if picked up
+        if skip == True:
+            skip = False
+            continue
+
+        # get defender index
+        defending_player = (attacker + 1) % len(players)
+        attack_move = players[attacker].get_attack_move(get_player_hand_sizes(players), defending_player)
+        defense_move = players[defending_player].get_defense_move(attack_move, get_player_hand_sizes, attacker)
+
+        if len(defense_move) == 0:
+            skip = True
+            # this means the player picked up, and skips their next attack turn
+
+        # have players draw their hands
+        players[attacker].draw_hand(deck)
+        players[defending_player].draw_hand(deck)
+
+        # shows the rest of the players which cards were played
+        show_players_moves(players, attack_move, attacker)
+        show_players_moves(players, defense_move, defending_player)
+
+        attacker = (attacker + 1) % len(players)
+
+
+    print("win")
+    for i in winners:
+        print(i.id)
+    print()
+
+    print("duraki")
+    for i in players:
+        print(i.id)
+
+
+def show_players_moves(players, move, id):
+    for p in players:
+        p.update_cards_used(move, id)
+
+def setup_game(players, deck):
+    for player in players:
+        player.draw_hand(deck)
+
+def get_player_hand_sizes(players):
+    sizes = []
+    for p in players:
+        sizes.append(len(p.hand))
+
+    return sizes
+
+# has a bug where it doesn't do single cards, and sometimes does double cards where the second option is None
 def get_valid_attack_moves(hand, defender_hand_size):
     valid_moves = []
     attack_size = min(4, defender_hand_size)
@@ -19,12 +78,17 @@ def get_valid_attack_moves(hand, defender_hand_size):
 
     # Generate combinations for each face
     for cards in moves.values():
-        for i in range(1, min(len(cards), attack_size) + 1):
+        for i in range(0, min(len(cards), attack_size) + 1):
             valid_moves.extend(combinations(cards, i))
+
+    valid_moves = [combo for combo in valid_moves if None not in combo]
 
     return valid_moves
 
 def get_valid_defense_moves(hand, attack_hand, trump_suit):
+    if len(attack_hand) > len(hand):
+        print(attack_hand, hand)
+        exit(0)
     valid_defense = [[] for _ in range(len(attack_hand))]
     # creates all possible cards that can defend against each card in each index
     for i, a_card in enumerate(attack_hand):
@@ -46,6 +110,9 @@ def get_valid_defense_moves(hand, attack_hand, trump_suit):
 
     # Generate all possible combinations
     valid_combinations = list(product(*valid_defense))
+
+    # filter out combinations that have duplicates
+    valid_combinations = [combo for combo in valid_combinations if len(set(combo)) == len(combo)]
 
     # change the tuples to lists
     valid_moves = [list(combo) for combo in valid_combinations]

@@ -51,7 +51,7 @@ class Deck:
         return string
 
 
-@dataclass
+@dataclass(frozen=True)
 @total_ordering
 class Card:
     suit: str
@@ -79,4 +79,7 @@ class Card:
 
     def copy(self):
         return Card(suit=self.suit, face=self.face)
+    
+    def __hash__(self):
+        return hash((self.suit, self.face))
         
