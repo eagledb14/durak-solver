@@ -1,6 +1,5 @@
 from deck import faces
 from itertools import product, combinations
-# from random_player import RandomPlayer
 
 
 def play_game(players, deck):
@@ -11,10 +10,6 @@ def play_game(players, deck):
 
     attacker = 0
     while len(players) > 1:
-        # pop off anyone who has run out of cards
-        if players[attacker].is_finished():
-            winners.append(players.pop(attacker))
-            continue
 
         # skip turn if picked up
         if skip == True:
@@ -38,6 +33,20 @@ def play_game(players, deck):
         show_players_moves(players, attack_move, attacker)
         show_players_moves(players, defense_move, defending_player)
 
+        # pop off anyone who has run out of cards
+        if players[attacker].is_finished():
+            winners.append(players.pop(attacker))
+            attacker -= 1
+            defending_player -= 1
+
+        if len(players) == 1:
+            break
+
+        if players[defending_player].is_finished():
+            winners.append(players.pop(defending_player))
+            attacker -= 1
+            defending_player -= 1
+
         attacker = (attacker + 1) % len(players)
 
 
@@ -46,7 +55,7 @@ def play_game(players, deck):
         print(i.id)
     print()
 
-    print("duraki")
+    print("durak")
     for i in players:
         print(i.id)
 
@@ -54,6 +63,10 @@ def play_game(players, deck):
 def show_players_moves(players, move, id):
     for p in players:
         p.update_cards_used(move, id)
+
+def show_players_picked_up(players, move, id):
+    for p in players:
+        p.update_cards_picked_up(move, id)
 
 def setup_game(players, deck):
     for player in players:
@@ -116,5 +129,8 @@ def get_valid_defense_moves(hand, attack_hand, trump_suit):
 
     # change the tuples to lists
     valid_moves = [list(combo) for combo in valid_combinations]
+
+    # add option to pick up attacking cards
+    valid_moves.append([])
 
     return valid_moves

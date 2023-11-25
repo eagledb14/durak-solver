@@ -42,3 +42,6 @@ class RandomPlayer:
     def update_cards_used(self, cards, player_id):
         pass
 
+    def update_cards_picked_up(self, cards, player_id):
+        pass
+
