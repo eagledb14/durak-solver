@@ -10,7 +10,6 @@ def play_game(players, deck):
 
     attacker = 0
     while len(players) > 1:
-        print("Deck", len(deck))
 
         # skip turn if picked up
         if skip == True:
@@ -23,20 +22,21 @@ def play_game(players, deck):
         attack_move = players[attacker].get_attack_move(get_player_hand_sizes(players), defending_player)
         defense_move = players[defending_player].get_defense_move(attack_move, get_player_hand_sizes(players), attacker)
 
+        # this means the player picked up, and skips their next attack turn
         if defense_move == []:
             skip = True
-            # this means the player picked up, and skips their next attack turn
 
         # shows the rest of the players which cards were played
-        show_players_moves(players, attack_move, attacker)
+        update_players_moves(players, attack_move, attacker)
         if defense_move == []:
-            show_players_picked_up(players, attack_move, defending_player)
+            update_players_picked_up(players, attack_move, defending_player)
         else:
-            show_players_moves(players, defense_move, defending_player)
+            update_players_moves(players, defense_move, defending_player)
 
         # pop off anyone who has run out of cards
         if players[attacker].is_finished():
             winners.append(players.pop(attacker))
+            update_players_finished(players, attacker)
             attacker -= 1
             defending_player -= 1
         else:
@@ -47,6 +47,7 @@ def play_game(players, deck):
 
         if players[defending_player].is_finished():
             winners.append(players.pop(defending_player))
+            update_players_finished(players, defending_player)
             attacker -= 1
             defending_player -= 1
         else:
@@ -65,13 +66,17 @@ def play_game(players, deck):
         print(i.id)
 
 
-def show_players_moves(players, move, id):
+def update_players_moves(players, move, id):
     for p in players:
         p.update_cards_used(move, id)
 
-def show_players_picked_up(players, move, id):
+def update_players_picked_up(players, move, id):
     for p in players:
         p.update_cards_picked_up(move, id)
+
+def update_players_finished(players, player_id):
+    for p in players:
+        p.update_player_finished(player_id)
 
 def setup_game(players, deck):
     for player in players:

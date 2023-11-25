@@ -87,3 +87,6 @@ class HumanPlayer:
         for i in cards:
             print(i)
         print()
+
+    def update_player_finished(self, player_id):
+        print(f'Player {player_id} is out of cards\n')

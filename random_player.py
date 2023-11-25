@@ -45,3 +45,6 @@ class RandomPlayer:
     def update_cards_picked_up(self, cards, player_id):
         pass
 
+    def update_player_finished(self, player_id):
+        pass
+
