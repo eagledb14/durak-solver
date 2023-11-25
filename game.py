@@ -55,16 +55,8 @@ def play_game(players, deck):
 
         attacker = (attacker + 1) % len(players)
 
-
-    print("win")
-    for i in winners:
-        print(i.id)
-    print()
-
-    print("durak")
-    for i in players:
-        print(i.id)
-
+    print("Winner:", ', '.join(str(player.id) for player in winners))
+    print("\nDurak:", ', '.join(str(player.id) for player in players))
 
 def update_players_moves(players, move, id):
     for p in players:
