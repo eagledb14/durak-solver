@@ -1,6 +1,7 @@
 from game import get_valid_attack_moves, get_valid_defense_moves
 import random
 
+# picks randomly from possible moves
 class RandomPlayer:
     def __init__(self, trump_card, id):
         self.hand = []
