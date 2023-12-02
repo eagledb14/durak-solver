@@ -1,8 +1,8 @@
 import sys
 from deck import Deck
 from game import play_game
-from random_player import RandomPlayer
-from human_player import HumanPlayer
+from players.random_player import RandomPlayer
+from players.human_player import HumanPlayer
 
 if __name__ == '__main__':
     if len(sys.argv) <= 2:

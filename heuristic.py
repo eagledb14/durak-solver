@@ -39,5 +39,5 @@ def get_high_heuristic(hand, trump):
 
 
 # the point of this one is to get values closest to zero, so big positive and negative numbers are bad
-def get_low_heuristic():
+def get_low_heuristic(hand, trump):
     pass
