@@ -1,4 +1,4 @@
-from deck import faces
+from deck import faces, Card
 from itertools import product, combinations
 
 

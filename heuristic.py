@@ -1,4 +1,4 @@
-from deck import suits, faces, Deck, Card
+from deck import faces, Deck, Card
 
 
 
@@ -41,3 +41,36 @@ def get_high_heuristic(hand, trump):
 # the point of this one is to get values closest to zero, so big positive and negative numbers are bad
 def get_low_heuristic(hand, trump):
     pass
+
+
+# this rates the move from the list of attacks, according to me, the programmer
+def get_play_heuristic(move, trump_card):
+    heuristic = 0
+
+    # prioritize lengths with more cards
+    if len(move) == 0:
+        return 0
+
+    heuristic += len(move) ** 2
+
+    # priotitize getting rid of lower cards first
+    total = 0
+    for card in move:
+        total += (len(faces) - faces.index(card.face)) * 3
+    heuristic += (total / len(move))
+
+    # we don't want to use trump cards if we don't have to
+    for card in move:
+        if card.suit == trump_card.suit:
+            heuristic -= 5
+
+    return int(heuristic)
+
+
+# this rates the defense move from the list of defenses, according to me, the programmer
+def get_defense_heuristic(move, trump_card):
+    heuristic = 0
+
+
+
+    return heuristic
