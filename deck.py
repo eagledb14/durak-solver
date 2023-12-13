@@ -44,11 +44,11 @@ class Deck:
     def __len__(self):
         return len(self.cards)
 
-    def __str__(self):
-        string = ''
-        for card in self.cards:
-            string += f'{card}\n'
-        return string
+    # def __str__(self):
+    #     string = ''
+    #     for card in self.cards:
+    #         string += f'{card}\n'
+    #     return string
 
 
 @dataclass(frozen=True)

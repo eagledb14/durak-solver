@@ -27,16 +27,16 @@ def play_game(players, deck):
             skip = True
 
         # shows the rest of the players which cards were played
-        update_players_moves(players, attack_move, attacker)
+        update_players_moves(players, attack_move, players[attacker].id)
         if defense_move == []:
-            update_players_picked_up(players, attack_move, defending_player)
+            update_players_picked_up(players, attack_move, players[defending_player].id)
         else:
-            update_players_moves(players, defense_move, defending_player)
+            update_players_moves(players, defense_move, players[defending_player].id)
 
         # pop off anyone who has run out of cards
         if players[attacker].is_finished():
+            update_players_finished(players, players[attacker].id)
             winners.append(players.pop(attacker))
-            update_players_finished(players, attacker)
             attacker -= 1
             defending_player -= 1
         else:
@@ -46,8 +46,8 @@ def play_game(players, deck):
             break
 
         if players[defending_player].is_finished():
+            update_players_finished(players, players[defending_player].id)
             winners.append(players.pop(defending_player))
-            update_players_finished(players, defending_player)
             attacker -= 1
             defending_player -= 1
         else:
@@ -57,6 +57,7 @@ def play_game(players, deck):
 
     print("Winner:", ', '.join(str(player.id) for player in winners))
     print("\nDurak:", ', '.join(str(player.id) for player in players))
+    return [winners, players]
 
 def update_players_moves(players, move, id):
     for p in players:

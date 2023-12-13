@@ -1,7 +1,6 @@
 from deck import faces, Deck, Card
 
 
-
 # the point of this heuristic is to get the high values, higher the better
 # I want the lower scores to be more frequent
 def get_high_heuristic(hand, trump):
@@ -37,12 +36,6 @@ def get_high_heuristic(hand, trump):
 
     return int(heuristic)
 
-
-# the point of this one is to get values closest to zero, so big positive and negative numbers are bad
-def get_low_heuristic(hand, trump):
-    pass
-
-
 # this rates the move from the list of attacks, according to me, the programmer
 def get_play_heuristic(move, trump_card):
     heuristic = 0
@@ -67,10 +60,3 @@ def get_play_heuristic(move, trump_card):
     return int(heuristic)
 
 
-# this rates the defense move from the list of defenses, according to me, the programmer
-def get_defense_heuristic(move, trump_card):
-    heuristic = 0
-
-
-
-    return heuristic

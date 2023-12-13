@@ -1,40 +1,25 @@
 from deck import Deck
-from heuristic import get_high_heuristic
-import matplotlib.pyplot as plt
-from scipy.interpolate import make_interp_spline
-import numpy as np
+from game import play_game
 import random
+from players.random_player import RandomPlayer
+from players.naive_player import NaivePlayer
+from players.naive_move_player import NaiveMovePlayer
+results = {}
 
-d = Deck()
-score = {}
-tries = 10_000
-for _ in range(tries):
-    s = random.randint(1,10)
+for i in range(10_000):
+    d = Deck()
 
-    if len(d) < s:
-        d = Deck()
+    players = [NaivePlayer(d.trump_card, 0), RandomPlayer(d.trump_card, 1)]
+    random.shuffle(players)
 
-    h = d.draw(s)
-    hu = get_high_heuristic(h, d.trump_card)
-    if hu in score:
-        score[hu] += 1
-    else:
-        score[hu] = 1
+    game_res = play_game(players, d)
 
+    for player in game_res[0]:
+        if player.id not in results:
+            results[player.id] = 0
+        else:
+            results[player.id] += 1
 
-items = sorted(score.items(), key=lambda x: x[0])
-keys = np.array([item[0] for item in items])
-values = np.array([(item[1] / tries) * 100 for item in items])
-
-key_smooth = np.linspace(keys.min(), keys.max(), 1000)
-spl = make_interp_spline(keys, values, k=3)
-values_smooth = spl(key_smooth)
-
-plt.plot(key_smooth, values_smooth)
-
-plt.title('High Heuristic spread')
-plt.ylabel('Score Frequency (%)')
-plt.xlabel('Heuristic score')
-
-plt.show()
+for player, res in results.items():
+    print(player, (res / 10_000) * 100)
 
